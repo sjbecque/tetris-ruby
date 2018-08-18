@@ -22,16 +22,12 @@ module Tetris
       [
         [
           Cube.current(10, 0),
-          Cube.current(10, 1, true) do |direction|
-            vectors = {
-              0 => [{ x:-1, y:0 } , { x:-1, y:1 }],
-              1 => [{ x:1 , y:-1} , { x:0 , y:-1}],
-              2 => [{ x:0 , y:1 } , { x:0 , y:0 }],
-              3 => [{ x:0 , y:0 } , { x:1 , y:0 }]
-            }[self.rotation_index]
-
-            direction == :clockwise ? vectors.first : vectors.last
-          end,
+          Cube.current(10, 1, true, {
+            0 => [{ x:-1, y:0 } , { x:-1, y:1 }],
+            1 => [{ x:1 , y:-1} , { x:0 , y:-1}],
+            2 => [{ x:0 , y:1 } , { x:0 , y:0 }],
+            3 => [{ x:0 , y:0 } , { x:1 , y:0 }]
+          }),
           Cube.current(11, 1),
           Cube.current(11, 2)
         ],

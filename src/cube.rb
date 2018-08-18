@@ -3,21 +3,18 @@
 module Tetris
   class Cube
     attr_accessor :x, :y, :rotation
-    attr_reader :value, :origin
+    attr_reader :value, :origin, :rotation_corrections
 
-    def initialize(x, y, origin = false)
+    def initialize(x, y, origin = false, rotation_corrections = nil)
       @x = x
       @y = y
       @origin = origin
       @rotation = 0
+      @rotation_corrections = rotation_corrections
     end
 
-    def self.current(x, y, origin = false, &rotation_correction_block)
-      instance = new(x, y, origin)
-      instance.define_singleton_method(
-        :rotation_correction,
-        rotation_correction_block || lambda{|direction| {x:0, y:0}}
-      )
+    def self.current(x, y, origin = false, rotation_corrections = nil)
+      instance = new(x, y, origin, rotation_corrections)
       instance.set_current
       instance
     end
@@ -55,6 +52,16 @@ module Tetris
       self.y = origin.y + relative_x * directions.fetch(direction)
 
       self
+    end
+
+    def rotation_correction(direction)
+      if @rotation_corrections
+        vectors = @rotation_corrections[self.rotation_index]
+
+        direction == :clockwise ? vectors.first : vectors.last
+      else
+        { x: 0, y: 0}
+      end
     end
 
     def to_s
