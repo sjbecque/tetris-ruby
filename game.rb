@@ -13,6 +13,10 @@ module Tetris
     end
 
     def process_user_input(input)
+      if input[0] == 'q'
+        exit
+      end
+
       @items<< input
     end
   end

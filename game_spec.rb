@@ -20,5 +20,10 @@ describe 'Game' do
       expect{ subject.process_user_input("input") }
       .to change{subject.items}.from([]).to(["input"])
     end
+
+    it 'quits when hitting "q"' do
+      expect(subject).to receive(:exit)
+      subject.process_user_input("q")
+    end
   end
 end
