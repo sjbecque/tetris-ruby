@@ -1,6 +1,7 @@
 # author: Stephan Becque (https://github.com/sjbecque)
 
 require 'thread'
+require './game'
 
 module Tetris
   class Engine
@@ -38,24 +39,6 @@ module Tetris
           @game.process_user_input(input)
         end
       end
-    end
-  end
-end
-
-module Tetris
-  class Game
-    attr_reader :items
-
-    def initialize
-      @items = []
-    end
-
-    def next_tick
-      @items<< "value"
-    end
-
-    def process_user_input(input)
-      @items<< input
     end
   end
 end
