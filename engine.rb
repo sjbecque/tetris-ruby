@@ -42,11 +42,13 @@ module Tetris
 
         @mutex.synchronize do
           @game.process_user_input(input)
+          render
         end
       end
     end
 
     def render
+      print "======================\n"
       @game.grid.each {|row|
         print row.join("")
         print "\n\r" # for proper console outlining
