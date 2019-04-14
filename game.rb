@@ -14,10 +14,10 @@ module Tetris
       @height = height
 
       @cubes = []
-      @cubes<< Cube.new(0, 10)
-      @cubes<< Cube.new(0, 11)
-      @cubes<< Cube.new(1, 10)
-      @cubes<< Cube.new(1, 11)
+      @cubes<< Cube.new(10, 0)
+      @cubes<< Cube.new(11, 0)
+      @cubes<< Cube.new(10, 1)
+      @cubes<< Cube.new(11, 1)
     end
 
     def next_tick
@@ -33,8 +33,8 @@ module Tetris
     end
 
     def grid
-      (0...@width).map do |x|
-        (0...@height).map do |y|
+      (0...@height).map do |y|
+        (0...@width).map do |x|
           (cube(x, y) || "-").to_s
         end
       end

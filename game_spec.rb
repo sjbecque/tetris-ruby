@@ -17,8 +17,8 @@ describe 'Game' do
     it 'moves the tetronimo down one spot' do
       expect{ subject.next_tick }
       .to change{subject.send(:tetronimo_cubes).map(&:y)}
-      .from( [10, 11, 10, 11] )
-      .to([11, 12, 11, 12])
+      .from( [0, 0, 1, 1] )
+      .to( [1, 1, 2, 2] )
     end
   end
 
