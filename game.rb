@@ -21,7 +21,7 @@ module Tetris
     end
 
     def next_tick
-      @items<< "value"
+      move_down
     end
 
     def process_user_input(input)
@@ -41,6 +41,16 @@ module Tetris
     end
 
     private
+
+    def move_down
+      tetronimo_cubes.each do |cube|
+        cube.y = cube.y + 1
+      end
+    end
+
+    def tetronimo_cubes
+      @cubes.select(&:current?)
+    end
 
     def cube(x, y)
       @cubes.find do |cube|

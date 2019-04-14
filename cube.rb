@@ -1,8 +1,7 @@
 # author: Stephan Becque (https://github.com/sjbecque)
 
 class Cube
-  attr_reader :x
-  attr_reader :y
+  attr_accessor :x, :y
   attr_reader :value
 
   def initialize(x, y)

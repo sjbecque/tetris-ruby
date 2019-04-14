@@ -14,9 +14,11 @@ describe 'Game' do
   end
 
   describe 'next_tick' do
-    it 'adds a value to items' do
+    it 'moves the tetronimo down one spot' do
       expect{ subject.next_tick }
-      .to change{subject.items}.from([]).to(["value"])
+      .to change{subject.send(:tetronimo_cubes).map(&:y)}
+      .from( [10, 11, 10, 11] )
+      .to([11, 12, 11, 12])
     end
   end
 
