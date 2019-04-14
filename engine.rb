@@ -26,8 +26,10 @@ module Tetris
           sleep 1
 
           @mutex.synchronize do
-            system("reset") unless @test
-            render
+            unless @test
+              system("reset")
+              render
+            end
             @game.next_tick
           end
         end
