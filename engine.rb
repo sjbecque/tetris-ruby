@@ -11,9 +11,10 @@ module Tetris
     def initialize(test: false)
       @game = Game.new
       @mutex = Mutex.new
+      @test = test
 
       start_time_loop
-      start_input_loop unless test
+      start_input_loop unless @test
       self
     end
 
@@ -26,6 +27,8 @@ module Tetris
 
           @mutex.synchronize do
             @game.next_tick
+            system("reset") unless @test
+            render
           end
         end
       end
@@ -39,6 +42,10 @@ module Tetris
           @game.process_user_input(input)
         end
       end
+    end
+
+    def render
+      @game.grid.each {|row| puts row.join("") }
     end
   end
 end

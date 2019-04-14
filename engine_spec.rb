@@ -12,7 +12,7 @@ describe 'Engine' do
       engine.mutex.synchronize do
         engine.game.process_user_input("input")
       end
-      expect(engine.game.items).to eq ["value", "value", "input", "value"]
+      expect(engine.game.items).to eq ["value", "value", "input"]
     end
   end
 
