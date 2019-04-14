@@ -2,6 +2,7 @@
 
 require 'thread'
 require './game'
+require 'io/console'
 
 module Tetris
   class Engine
@@ -27,7 +28,6 @@ module Tetris
 
           @mutex.synchronize do
             unless @test
-              system("reset")
               render
             end
             @game.next_tick
@@ -38,7 +38,7 @@ module Tetris
 
     def start_input_loop
       loop do
-        input = gets
+        input = STDIN.getch
 
         @mutex.synchronize do
           @game.process_user_input(input)
@@ -47,7 +47,10 @@ module Tetris
     end
 
     def render
-      @game.grid.each {|row| puts row.join("") }
+      @game.grid.each {|row|
+        print row.join("")
+        print "\n\r" # for proper console outlining
+      }
     end
   end
 end

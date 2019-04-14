@@ -3,13 +3,10 @@ require './cube'
 
 module Tetris
   class Game
-    attr_reader :items
     attr_reader :width, :height
     attr_reader :cubes
 
     def initialize(width = 20, height = 20)
-      @items = []
-
       @width = width
       @height = height
 
@@ -25,11 +22,15 @@ module Tetris
     end
 
     def process_user_input(input)
-      if input[0] == 'q'
+      key = input[0]
+      case key
+      when 'q'
         exit
+      when '1'
+        move(:left)
+      when '3'
+        move(:right)
       end
-
-      @items<< input
     end
 
     def grid
@@ -45,6 +46,17 @@ module Tetris
     def move_down
       tetronimo_cubes.each do |cube|
         cube.y = cube.y + 1
+      end
+    end
+
+    def move(direction)
+      directions = {
+        left: -1,
+        right: 1
+      }
+
+      tetronimo_cubes.each do |cube|
+        cube.x = cube.x + directions.fetch(direction)
       end
     end
 

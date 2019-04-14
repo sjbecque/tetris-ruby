@@ -23,9 +23,18 @@ describe 'Game' do
   end
 
   describe 'process_user_input' do
-    it 'adds user input to items' do
-      expect{ subject.process_user_input("input") }
-      .to change{subject.items}.from([]).to(["input"])
+    it 'moves tetronimo to the left if told' do
+      expect{ subject.process_user_input("1") }
+      .to change{subject.send(:tetronimo_cubes).map(&:x)}
+      .from( [10, 11, 10, 11] )
+      .to([9, 10, 9, 10])
+    end
+
+    it 'moves tetronimo to the right if told' do
+      expect{ subject.process_user_input("3") }
+      .to change{subject.send(:tetronimo_cubes).map(&:x)}
+      .from( [10, 11, 10, 11] )
+      .to([11, 12, 11, 12])
     end
 
     it 'quits when hitting "q"' do
