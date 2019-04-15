@@ -20,6 +20,34 @@ describe 'Game' do
       .from( [0, 0, 1, 1] )
       .to( [1, 1, 2, 2] )
     end
+
+    describe 'at the bottom' do
+      let(:height) { 20 }
+
+      let(:tetronimo) { [
+        Cube.current(10, height - 1),
+        Cube.current(11, height - 1)
+      ] }
+
+      let(:static_cubes) {
+        [ Cube.static(0, height - 1) ]
+      }
+
+      subject {
+        Tetris::Game.new(20, height, tetronimo.dup, static_cubes.dup)
+      }
+
+      it 'turns the tetronimo into static cubes' do
+        subject.next_tick
+        expect(tetronimo).to all(be_static)
+      end
+
+      it 'instantiates a new tetronimo' do
+        subject.next_tick
+        expect(subject.send(:all_cubes).size)
+          .to eq (tetronimo.size + static_cubes.size + subject.tetronimo1.size)
+      end
+    end
   end
 
   describe 'process_user_input' do

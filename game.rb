@@ -6,10 +6,10 @@ module Tetris
     attr_reader :width, :height
     attr_reader :tetronimo, :static_cubes
 
-    def initialize(width = 20, height = 20, tetronimo = [])
+    def initialize(width = 20, height = 20, tetronimo = [], static_cubes = [])
       @width = width
       @height = height
-      @static_cubes = []
+      @static_cubes = static_cubes
 
       @tetronimo = tetronimo
       unless @tetronimo.any?
@@ -41,21 +41,43 @@ module Tetris
       end
     end
 
-    private
-
-    def init_tetronimo
-      @tetronimo = [
-        Cube.new(10, 0),
-        Cube.new(11, 0),
-        Cube.new(10, 1),
-        Cube.new(11, 1)
+    def tetronimo1
+      [
+        Cube.current(10, 0),
+        Cube.current(11, 0),
+        Cube.current(10, 1),
+        Cube.current(11, 1)
       ]
     end
 
+    private
+
+    def init_tetronimo
+      @tetronimo = tetronimo1
+    end
+
     def move_down
-      @tetronimo.each do |cube|
+      new_tetronimo = get_clone(@tetronimo).each do |cube|
         cube.y = cube.y + 1
       end
+
+      if bottom_collision?(new_tetronimo)
+        stonify_tetronimo
+        init_tetronimo
+      else
+        @tetronimo = new_tetronimo
+      end
+    end
+
+    def bottom_collision?(tetronimo)
+      tetronimo.any? do |cube|
+        cube.y >= @height
+      end
+    end
+
+    def stonify_tetronimo
+      @tetronimo.each(&:stonify)
+      @static_cubes.concat(@tetronimo)
     end
 
     def move(direction)
@@ -67,6 +89,10 @@ module Tetris
       @tetronimo.each do |cube|
         cube.x = cube.x + directions.fetch(direction)
       end
+    end
+
+    def get_clone(cubes)
+      cubes.map(&:clone)
     end
 
     def cube(x, y)
