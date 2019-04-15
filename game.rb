@@ -4,17 +4,17 @@ require './cube'
 module Tetris
   class Game
     attr_reader :width, :height
-    attr_reader :cubes
+    attr_reader :tetronimo, :static_cubes
 
-    def initialize(width = 20, height = 20)
+    def initialize(width = 20, height = 20, tetronimo = [])
       @width = width
       @height = height
+      @static_cubes = []
 
-      @cubes = []
-      @cubes<< Cube.new(10, 0)
-      @cubes<< Cube.new(11, 0)
-      @cubes<< Cube.new(10, 1)
-      @cubes<< Cube.new(11, 1)
+      @tetronimo = tetronimo
+      unless @tetronimo.any?
+        init_tetronimo
+      end
     end
 
     def next_tick
@@ -43,8 +43,17 @@ module Tetris
 
     private
 
+    def init_tetronimo
+      @tetronimo = [
+        Cube.new(10, 0),
+        Cube.new(11, 0),
+        Cube.new(10, 1),
+        Cube.new(11, 1)
+      ]
+    end
+
     def move_down
-      tetronimo_cubes.each do |cube|
+      @tetronimo.each do |cube|
         cube.y = cube.y + 1
       end
     end
@@ -55,19 +64,19 @@ module Tetris
         right: 1
       }
 
-      tetronimo_cubes.each do |cube|
+      @tetronimo.each do |cube|
         cube.x = cube.x + directions.fetch(direction)
       end
     end
 
-    def tetronimo_cubes
-      @cubes.select(&:current?)
-    end
-
     def cube(x, y)
-      @cubes.find do |cube|
+      all_cubes.find do |cube|
         cube.x == x && cube.y == y
       end
+    end
+
+    def all_cubes
+      @tetronimo + @static_cubes
     end
   end
 end
