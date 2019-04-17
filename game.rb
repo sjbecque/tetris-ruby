@@ -61,7 +61,7 @@ module Tetris
         cube.y = cube.y + 1
       end
 
-      if bottom_collision?(new_tetronimo)
+      if bottom_collision?(new_tetronimo) or cube_collision?(new_tetronimo)
         stonify_tetronimo
         init_tetronimo
       else
@@ -73,6 +73,10 @@ module Tetris
       tetronimo.any? do |cube|
         cube.y >= @height
       end
+    end
+
+    def cube_collision?(tetronimo)
+      (tetronimo.map(&:coordinates) & @static_cubes.map(&:coordinates)).any?
     end
 
     def stonify_tetronimo

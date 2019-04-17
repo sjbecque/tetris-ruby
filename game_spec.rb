@@ -21,18 +21,7 @@ describe 'Game' do
       .to( [1, 1, 2, 2] )
     end
 
-    describe 'at the bottom' do
-      let(:height) { 20 }
-
-      let(:tetronimo) { [
-        Cube.current(10, height - 1),
-        Cube.current(11, height - 1)
-      ] }
-
-      let(:static_cubes) {
-        [ Cube.static(0, height - 1) ]
-      }
-
+    shared_examples 'handling collision' do
       subject {
         Tetris::Game.new(20, height, tetronimo.dup, static_cubes.dup)
       }
@@ -48,6 +37,37 @@ describe 'Game' do
           .to eq (tetronimo.size + static_cubes.size + subject.tetronimo1.size)
       end
     end
+
+    describe 'tetrinomo at the bottom' do
+      let(:height) { 20 }
+
+      let(:tetronimo) { [
+        Cube.current(10, height - 1),
+        Cube.current(11, height - 1)
+      ] }
+
+      let(:static_cubes) {
+        [ Cube.static(0, height - 1) ]
+      }
+
+      it_behaves_like 'handling collision'
+    end
+
+    describe 'tetrinomo just above a static cube' do
+      let(:height) { 20 }
+
+      let(:tetronimo) { [
+        Cube.current(0, height - 3),
+        Cube.current(0, height - 2)
+      ] }
+
+      let(:static_cubes) {
+        [ Cube.static(0, height - 1) ]
+      }
+
+      it_behaves_like 'handling collision'
+    end
+
   end
 
   describe 'process_user_input' do

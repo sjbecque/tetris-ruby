@@ -33,6 +33,10 @@ class Cube
     @value = :red
   end
 
+  def coordinates
+    [@x, @y]
+  end
+
   def to_s
     case
     when self.current?
