@@ -6,8 +6,12 @@ require './cube'
 describe 'Game' do
 
   subject {
-    Tetris::Game.new
+    Tetris::Game.new(20, height, tetronimo.dup, static_cubes.dup)
   }
+
+  let(:tetronimo) { [] }
+  let(:static_cubes) { [] }
+  let(:height) { 20 }
 
   it 'assigns an array of cubes' do
     expect(subject.send(:all_cubes)).to all(be_a(Cube))
@@ -22,10 +26,6 @@ describe 'Game' do
     end
 
     shared_examples 'handling collision' do
-      subject {
-        Tetris::Game.new(20, height, tetronimo.dup, static_cubes.dup)
-      }
-
       it 'turns the tetronimo into static cubes' do
         subject.next_tick
         expect(tetronimo).to all(be_static)
@@ -39,8 +39,6 @@ describe 'Game' do
     end
 
     describe 'tetrinomo at the bottom' do
-      let(:height) { 20 }
-
       let(:tetronimo) { [
         Cube.current(10, height - 1),
         Cube.current(11, height - 1)
@@ -93,10 +91,6 @@ describe 'Game' do
 
       let(:static_cubes) {
         [ Cube.static(12, 1) ]
-      }
-
-      subject {
-        Tetris::Game.new(20, 20, tetronimo.dup, static_cubes.dup)
       }
 
       it "doesn't react" do
