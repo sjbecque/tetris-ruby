@@ -27,10 +27,10 @@ module Tetris
           sleep 1
 
           @mutex.synchronize do
+            @game.next_tick
             unless @test
               render
             end
-            @game.next_tick
           end
         end
       end
