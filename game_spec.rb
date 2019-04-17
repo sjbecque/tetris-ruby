@@ -85,6 +85,26 @@ describe 'Game' do
       .to([11, 12, 11, 12])
     end
 
+    describe 'case of cube collision' do
+      let(:tetronimo) { [
+        Cube.current(10, 0),
+        Cube.current(11, 1)
+      ] }
+
+      let(:static_cubes) {
+        [ Cube.static(12, 1) ]
+      }
+
+      subject {
+        Tetris::Game.new(20, 20, tetronimo.dup, static_cubes.dup)
+      }
+
+      it "doesn't react" do
+        expect{ subject.process_user_input("3") }
+        .to_not change{subject.send(:tetronimo).map(&:coordinates) }
+      end
+    end
+
     it 'quits when hitting "q"' do
       expect(subject).to receive(:exit)
       subject.process_user_input("q")

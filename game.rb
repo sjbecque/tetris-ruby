@@ -90,8 +90,12 @@ module Tetris
         right: 1
       }
 
-      @tetronimo.each do |cube|
+      new_tetronimo = get_clone(@tetronimo).each do |cube|
         cube.x = cube.x + directions.fetch(direction)
+      end
+
+      unless cube_collision?(new_tetronimo)
+        @tetronimo = new_tetronimo
       end
     end
 
