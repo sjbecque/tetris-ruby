@@ -1,18 +1,21 @@
 # author: Stephan Becque (https://github.com/sjbecque)
 require './cube'
+require './tetronimo_factory'
 
 module Tetris
   class Game
     attr_reader :width, :height
-    attr_reader :tetronimo, :static_cubes
+    attr_reader :tetronimo, :static_cubes, :factory
 
-    def initialize(width = 20, height = 20, tetronimo = [], static_cubes = [])
+    def initialize(test, width = 20, height = 20, tetronimo = [], static_cubes = [])
       @width = width
       @height = height
       @static_cubes = static_cubes
+      @factory = TetronimoFactory.new(test)
 
-      @tetronimo = tetronimo
-      unless @tetronimo.any?
+      if tetronimo.any?
+        @tetronimo = tetronimo
+      else
         init_tetronimo
       end
     end
@@ -44,19 +47,11 @@ module Tetris
       end
     end
 
-    def tetronimo1
-      [
-        Cube.current(10, 0),
-        Cube.current(11, 0),
-        Cube.current(10, 1),
-        Cube.current(11, 1)
-      ]
-    end
 
     private
 
     def init_tetronimo
-      @tetronimo = tetronimo1
+      @tetronimo = @factory.produce
     end
 
     def move_down

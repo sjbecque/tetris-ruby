@@ -10,7 +10,7 @@ module Tetris
     attr_accessor :mutex
 
     def initialize(test: false)
-      @game = Game.new
+      @game = Game.new(test)
       @mutex = Mutex.new
       @test = test
 
@@ -23,16 +23,15 @@ module Tetris
 
     def start_time_loop
       @time_loop = Thread.new do
+
         loop do
           sleep 1
-
           @mutex.synchronize do
             @game.next_tick
-            unless @test
-              render
-            end
+            render unless @test
           end
         end
+
       end
     end
 

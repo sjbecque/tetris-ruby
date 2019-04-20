@@ -6,24 +6,25 @@ require './cube'
 describe 'Game' do
 
   subject {
-    Tetris::Game.new(20, height, tetronimo.dup, static_cubes.dup)
+    Tetris::Game.new(true, width, height, tetronimo.dup, static_cubes.dup)
   }
 
   let(:tetronimo) { [] }
   let(:static_cubes) { [] }
+  let(:width) { 20 }
   let(:height) { 20 }
 
 
-  shared_examples 'handling moving down collision' do
+  shared_examples 'handling moving-down collision' do
     it 'turns the tetronimo into static cubes' do
       subject.next_tick
       expect(tetronimo).to all(be_static)
     end
 
-    it 'instantiates a new tetronimo' do
+    it 'instantiates a new tetronimo while retaining all static_cubes' do
       subject.next_tick
       expect(subject.send(:all_cubes).size)
-        .to eq (tetronimo.size + static_cubes.size + subject.tetronimo1.size)
+        .to eq (tetronimo.size + static_cubes.size + subject.factory.produce.size)
     end
   end
 
@@ -57,7 +58,7 @@ describe 'Game' do
         [ Cube.static(0, height - 1) ]
       }
 
-      it_behaves_like 'handling moving down collision'
+      it_behaves_like 'handling moving-down collision'
     end
 
     describe 'tetrinomo just above a static cube' do
@@ -72,7 +73,7 @@ describe 'Game' do
         [ Cube.static(0, height - 1) ]
       }
 
-      it_behaves_like 'handling moving down collision'
+      it_behaves_like 'handling moving-down collision'
     end
 
   end
