@@ -13,6 +13,7 @@ describe 'Game' do
   let(:static_cubes) { [] }
   let(:height) { 20 }
 
+
   shared_examples 'handling moving down collision' do
     it 'turns the tetronimo into static cubes' do
       subject.next_tick
@@ -26,9 +27,9 @@ describe 'Game' do
     end
   end
 
-  shared_examples 'handling horizontal collision' do |key|
+  shared_examples 'handling horizontal collision' do |command|
     it 'lets the tetronimo stay put' do
-      expect{ subject.process_user_input(key) }
+      expect{ subject.move(command) }
       .to_not change{subject.send(:tetronimo).map(&:coordinates) }
     end
   end
@@ -77,15 +78,15 @@ describe 'Game' do
   end
 
   describe 'process_user_input' do
-    it 'moves tetronimo to the left if told' do
-      expect{ subject.process_user_input("1") }
+    it 'moves tetronimo to the left' do
+      expect{ subject.move(:left) }
       .to change{subject.send(:tetronimo).map(&:x)}
       .from( [10, 11, 10, 11] )
       .to([9, 10, 9, 10])
     end
 
-    it 'moves tetronimo to the right if told' do
-      expect{ subject.process_user_input("3") }
+    it 'moves tetronimo to the right' do
+      expect{ subject.move(:right) }
       .to change{subject.send(:tetronimo).map(&:x)}
       .from( [10, 11, 10, 11] )
       .to([11, 12, 11, 12])
@@ -97,7 +98,7 @@ describe 'Game' do
         Cube.current(0, 0)
       ] }
 
-      it_behaves_like 'handling horizontal collision', "1"
+      it_behaves_like 'handling horizontal collision', :left
     end
 
     describe 'when at the right edge' do
@@ -105,7 +106,7 @@ describe 'Game' do
         Cube.current(19, 0)
       ] }
 
-      it_behaves_like 'handling horizontal collision', "3"
+      it_behaves_like 'handling horizontal collision', :right
     end
 
     describe 'case of cube collision' do
@@ -119,15 +120,11 @@ describe 'Game' do
       }
 
       it "doesn't react" do
-        expect{ subject.process_user_input("3") }
+        expect{ subject.move(:right) }
         .to_not change{subject.send(:tetronimo).map(&:coordinates) }
       end
     end
 
-    it 'quits when hitting "q"' do
-      expect(subject).to receive(:exit)
-      subject.process_user_input("q")
-    end
   end
 
   describe 'grid' do

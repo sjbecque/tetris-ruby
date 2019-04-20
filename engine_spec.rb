@@ -14,6 +14,11 @@ describe 'Engine' do
       expect(engine.game).to receive(:next_tick).exactly(3).times
       sleep 3.5
     end
+
+    it 'quits when hitting "q"' do
+      expect(engine).to receive(:exit)
+      engine.send(:process_user_input, 'q')
+    end
   end
 
 end

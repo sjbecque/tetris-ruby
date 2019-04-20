@@ -21,15 +21,18 @@ module Tetris
       move_down
     end
 
-    def process_user_input(input)
-      key = input[0]
-      case key
-      when 'q'
-        exit
-      when '1'
-        move(:left)
-      when '3'
-        move(:right)
+    def move(direction)
+      directions = {
+        left: -1,
+        right: 1
+      }
+
+      new_tetronimo = get_clone(@tetronimo).each do |cube|
+        cube.x = cube.x + directions.fetch(direction)
+      end
+
+      unless (boundary_collision?(new_tetronimo) or cube_collision?(new_tetronimo))
+        @tetronimo = new_tetronimo
       end
     end
 
@@ -82,21 +85,6 @@ module Tetris
     def stonify_tetronimo
       @tetronimo.each(&:stonify)
       @static_cubes.concat(@tetronimo)
-    end
-
-    def move(direction)
-      directions = {
-        left: -1,
-        right: 1
-      }
-
-      new_tetronimo = get_clone(@tetronimo).each do |cube|
-        cube.x = cube.x + directions.fetch(direction)
-      end
-
-      unless (boundary_collision?(new_tetronimo) or cube_collision?(new_tetronimo))
-        @tetronimo = new_tetronimo
-      end
     end
 
     def boundary_collision?(tetronimo)

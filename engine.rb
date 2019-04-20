@@ -41,9 +41,20 @@ module Tetris
         input = STDIN.getch
 
         @mutex.synchronize do
-          @game.process_user_input(input)
+          process_user_input(input)
           render
         end
+      end
+    end
+
+    def process_user_input(input)
+      case input
+      when '1'
+        @game.move(:left)
+      when '3'
+        @game.move(:right)
+      when 'q'
+        exit
       end
     end
 
