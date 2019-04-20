@@ -13,6 +13,27 @@ describe 'Game' do
   let(:static_cubes) { [] }
   let(:height) { 20 }
 
+  shared_examples 'handling moving down collision' do
+    it 'turns the tetronimo into static cubes' do
+      subject.next_tick
+      expect(tetronimo).to all(be_static)
+    end
+
+    it 'instantiates a new tetronimo' do
+      subject.next_tick
+      expect(subject.send(:all_cubes).size)
+        .to eq (tetronimo.size + static_cubes.size + subject.tetronimo1.size)
+    end
+  end
+
+  shared_examples 'handling horizontal collision' do |key|
+    it 'lets the tetronimo stay put' do
+      expect{ subject.process_user_input(key) }
+      .to_not change{subject.send(:tetronimo).map(&:coordinates) }
+    end
+  end
+
+
   it 'assigns an array of cubes' do
     expect(subject.send(:all_cubes)).to all(be_a(Cube))
   end
@@ -25,19 +46,6 @@ describe 'Game' do
       .to( [1, 1, 2, 2] )
     end
 
-    shared_examples 'handling collision' do
-      it 'turns the tetronimo into static cubes' do
-        subject.next_tick
-        expect(tetronimo).to all(be_static)
-      end
-
-      it 'instantiates a new tetronimo' do
-        subject.next_tick
-        expect(subject.send(:all_cubes).size)
-          .to eq (tetronimo.size + static_cubes.size + subject.tetronimo1.size)
-      end
-    end
-
     describe 'tetrinomo at the bottom' do
       let(:tetronimo) { [
         Cube.current(10, height - 1),
@@ -48,7 +56,7 @@ describe 'Game' do
         [ Cube.static(0, height - 1) ]
       }
 
-      it_behaves_like 'handling collision'
+      it_behaves_like 'handling moving down collision'
     end
 
     describe 'tetrinomo just above a static cube' do
@@ -63,7 +71,7 @@ describe 'Game' do
         [ Cube.static(0, height - 1) ]
       }
 
-      it_behaves_like 'handling collision'
+      it_behaves_like 'handling moving down collision'
     end
 
   end
@@ -81,6 +89,23 @@ describe 'Game' do
       .to change{subject.send(:tetronimo).map(&:x)}
       .from( [10, 11, 10, 11] )
       .to([11, 12, 11, 12])
+    end
+
+
+    describe 'when at the leftedge' do
+      let(:tetronimo) { [
+        Cube.current(0, 0)
+      ] }
+
+      it_behaves_like 'handling horizontal collision', "1"
+    end
+
+    describe 'when at the right edge' do
+      let(:tetronimo) { [
+        Cube.current(19, 0)
+      ] }
+
+      it_behaves_like 'handling horizontal collision', "3"
     end
 
     describe 'case of cube collision' do
@@ -115,4 +140,5 @@ describe 'Game' do
       expect(subject.grid[0][0]).to eq "-"
     end
   end
+
 end

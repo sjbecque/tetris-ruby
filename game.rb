@@ -94,8 +94,14 @@ module Tetris
         cube.x = cube.x + directions.fetch(direction)
       end
 
-      unless cube_collision?(new_tetronimo)
+      unless (boundary_collision?(new_tetronimo) or cube_collision?(new_tetronimo))
         @tetronimo = new_tetronimo
+      end
+    end
+
+    def boundary_collision?(tetronimo)
+      tetronimo.any? do |cube|
+        !(0...@width).include?(cube.x)
       end
     end
 
