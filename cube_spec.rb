@@ -5,10 +5,12 @@ require './cube'
 describe 'Cube' do
 
   subject {
-    Cube.new(3,3)
+    Tetris::Cube.new(3,3)
   }
 
-  it 'starts out being part of the current tetronimo' do
-    expect(subject.current?).to eq true
+  it 'is able to become part of the current tetronimo' do
+    expect{ subject.set_current }
+      .to change{ subject.current? }
+      .from(false).to(true)
   end
 end

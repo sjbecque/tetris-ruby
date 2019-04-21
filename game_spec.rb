@@ -37,7 +37,7 @@ describe 'Game' do
 
 
   it 'assigns an array of cubes' do
-    expect(subject.send(:all_cubes)).to all(be_a(Cube))
+    expect(subject.send(:all_cubes)).to all(be_a(Tetris::Cube))
   end
 
   describe 'next_tick' do
@@ -50,12 +50,12 @@ describe 'Game' do
 
     describe 'tetrinomo at the bottom' do
       let(:tetronimo) { [
-        Cube.current(10, height - 1),
-        Cube.current(11, height - 1)
+        Tetris::Cube.current(10, height - 1),
+        Tetris::Cube.current(11, height - 1)
       ] }
 
       let(:static_cubes) {
-        [ Cube.static(0, height - 1) ]
+        [ Tetris::Cube.static(0, height - 1) ]
       }
 
       it_behaves_like 'handling moving-down collision'
@@ -65,12 +65,12 @@ describe 'Game' do
       let(:height) { 20 }
 
       let(:tetronimo) { [
-        Cube.current(0, height - 3),
-        Cube.current(0, height - 2)
+        Tetris::Cube.current(0, height - 3),
+        Tetris::Cube.current(0, height - 2)
       ] }
 
       let(:static_cubes) {
-        [ Cube.static(0, height - 1) ]
+        [ Tetris::Cube.static(0, height - 1) ]
       }
 
       it_behaves_like 'handling moving-down collision'
@@ -96,7 +96,7 @@ describe 'Game' do
 
     describe 'when at the leftedge' do
       let(:tetronimo) { [
-        Cube.current(0, 0)
+        Tetris::Cube.current(0, 0)
       ] }
 
       it_behaves_like 'handling horizontal collision', :left
@@ -104,7 +104,7 @@ describe 'Game' do
 
     describe 'when at the right edge' do
       let(:tetronimo) { [
-        Cube.current(19, 0)
+        Tetris::Cube.current(19, 0)
       ] }
 
       it_behaves_like 'handling horizontal collision', :right
@@ -112,12 +112,12 @@ describe 'Game' do
 
     describe 'case of cube collision' do
       let(:tetronimo) { [
-        Cube.current(10, 0),
-        Cube.current(11, 1)
+        Tetris::Cube.current(10, 0),
+        Tetris::Cube.current(11, 1)
       ] }
 
       let(:static_cubes) {
-        [ Cube.static(12, 1) ]
+        [ Tetris::Cube.static(12, 1) ]
       }
 
       it "doesn't react" do
