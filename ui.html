@@ -1,0 +1,61 @@
+<script type="text/javascript">
+  var ws = null;
+
+  function init() {
+    ws = new WebSocket("ws://localhost:8080");
+
+    ws.onopen = function() {
+      console.log("Connection is opened");
+    }
+    ws.onclose = function() {
+      console.log("Connection is closed");
+    }
+    ws.onmessage = function(msg) {
+      json = JSON.parse(msg.data);
+
+      html = json.map(function(row_cubes) {
+        row_elm = document.createElement("div");
+        row_elm.className = "row";
+
+        row_cubes.map(function(cube) {
+          cube_elm = document.createElement("div");
+          cube_elm.className = "cube " + cube;
+          row_elm.appendChild(cube_elm);
+        });
+        return row_elm.outerHTML;
+      }).join('');
+
+      document.getElementById("display").innerHTML = html;
+    }
+  }
+
+  function send() {
+    ws.send(document.getElementById("txt").value);
+  }
+</script>
+
+<head>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+  <style>
+  #display .cube {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #afafaf;
+    border: 1px solid #aaaaaa;
+  }
+  #display .cube.red {
+    background-color: #ff0505;
+    border: 1px solid #d60000;
+  }
+  #display .cube.current {
+    background-color: #009479;
+    border: 1px solid #006b57;
+  }
+  </style>
+</head>
+
+<body onload="init();">
+  <p id="display"></p>
+</body>

@@ -129,13 +129,17 @@ describe 'Game' do
   end
 
   describe 'grid' do
-    it 'has the right width' do
-      expect(subject.grid.size).to eq (subject.width)
+    it 'produces rows of cubes and nils' do
+      expect(subject.grid{|cube| cube }.flatten.compact).to be_all(Tetris::Cube)
+    end
+
+    it 'has the right dimensions' do
+      expect(subject.grid{|row| row}.first.size).to eq subject.width
+      expect(subject.grid{|row| row}.size).to eq subject.height
     end
 
     it 'returns cubes and empty fields at the right spots' do
-      expect(subject.grid[0][10]).to eq "x"
-      expect(subject.grid[0][0]).to eq "-"
+      expect( subject.grid{|cube| cube}[0][10] ).to be_a(Tetris::Cube)
     end
   end
 

@@ -39,16 +39,21 @@ module Tetris
       end
     end
 
+    # provide the rows of cubes for (engine) consumer
+    # note, also provides nil to yield
+    # alternatively we could define an empty Cube to prevents nil's, then
+    # yield a block would become unnecessary, but now makes for nice demo
     def grid
       (0...@height).map do |y|
         (0...@width).map do |x|
-          (cube(x, y) || "-").to_s
+          yield cube(x,y)
         end
       end
     end
 
 
     private
+
 
     def init_tetronimo
       @tetronimo = @factory.produce

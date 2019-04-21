@@ -3,23 +3,35 @@
 require 'thread'
 require './game'
 require 'io/console'
+require 'eventmachine'
+require 'em-websocket'
 
 module Tetris
   class Engine
     attr_accessor :game
     attr_accessor :mutex
 
-    def initialize(test: false)
-      @game = Game.new(test)
-      @mutex = Mutex.new
+    def initialize(test: false, console: false)
       @test = test
+      @console = console
+      @game = Game.new(@test)
+      @mutex = Mutex.new
 
+      if (not @test and not @console)
+        start_browser
+        start_ui_websocket
+        sleep 0.1
+      end
       start_time_loop
       start_input_loop unless @test
       self
     end
 
     private
+
+    def start_browser
+      `x-www-browser ui.html`
+    end
 
     def start_time_loop
       @time_loop = Thread.new do
@@ -58,11 +70,45 @@ module Tetris
     end
 
     def render
-      print "======================\n"
-      @game.grid.each {|row|
-        print row.join("")
-        print "\n\r" # for proper console outlining
+      if @console
+        rows = @game.grid {|cube| (cube || "-").to_s }
+
+        print "======================\n"
+        rows.each do |row|
+          print row.join
+          print "\n\r" # for proper console outlining
+        end
+      else
+        raise RuntimeError, "no websocket" unless @event_machine["websocket"]
+
+        str = @game.grid {|cube| cube&.value.to_s || "" }.to_s
+        @event_machine["websocket"].send(str)
+      end
+    end
+
+    def start_ui_websocket
+      @event_machine = Thread.new {
+
+        EventMachine.run do
+          EventMachine::WebSocket.start(host: "0.0.0.0", port: 8080) do |websocket|
+            puts "--- start websocket"
+            Thread.current["websocket"] = websocket
+            websocket.onopen do
+              puts "WebSocket connection open"
+            end
+
+            websocket.onclose do
+              puts "WebSocket connection closed"
+            end
+
+            websocket.onmessage do |msg|
+              puts msg
+              websocket.send(msg)
+            end
+          end
+        end
       }
+
     end
   end
 end
