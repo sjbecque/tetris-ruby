@@ -22,15 +22,16 @@
           cube_elm.className = "cube " + cube;
           row_elm.appendChild(cube_elm);
         });
+
         return row_elm.outerHTML;
       }).join('');
 
       document.getElementById("display").innerHTML = html;
     }
-  }
 
-  function send() {
-    ws.send(document.getElementById("txt").value);
+    document.addEventListener("keydown", event => {
+      ws.send(event.key);
+    });
   }
 </script>
 

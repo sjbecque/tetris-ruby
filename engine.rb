@@ -66,6 +66,8 @@ module Tetris
         @game.move(:right)
       when 'q'
         exit
+      else
+        # ignore
       end
     end
 
@@ -93,18 +95,11 @@ module Tetris
           EventMachine::WebSocket.start(host: "0.0.0.0", port: 8080) do |websocket|
             puts "--- start websocket"
             Thread.current["websocket"] = websocket
-            websocket.onopen do
-              puts "WebSocket connection open"
-            end
 
-            websocket.onclose do
-              puts "WebSocket connection closed"
-            end
+            websocket.onopen { puts "WebSocket connection open" }
+            websocket.onclose { puts "WebSocket connection closed" }
 
-            websocket.onmessage do |msg|
-              puts msg
-              websocket.send(msg)
-            end
+            websocket.onmessage do |msg| process_user_input(msg) end
           end
         end
       }
