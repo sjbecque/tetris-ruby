@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
-require './engine.rb'
+require './src/engine.rb'
 
 Tetris::Engine.new(test: false, console: (ARGV[0] == "c"))

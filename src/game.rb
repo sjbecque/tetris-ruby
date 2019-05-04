@@ -1,6 +1,6 @@
 # author: Stephan Becque (https://github.com/sjbecque)
-require './cube'
-require './tetronimo_factory'
+require './src/cube'
+require './src/tetronimo_factory'
 
 module Tetris
   class Game

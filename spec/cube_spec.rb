@@ -1,6 +1,6 @@
 # author: Stephan Becque (https://github.com/sjbecque)
 
-require './cube'
+require './src/cube'
 
 describe 'Cube' do
 

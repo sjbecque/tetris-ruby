@@ -1,6 +1,6 @@
 # author: Stephan Becque (https://github.com/sjbecque)
 
-require './cube'
+require './src/cube'
 
 # "factory" is maybe a bit too strong term for this class
 # (and there is no polymorphism needed ;)

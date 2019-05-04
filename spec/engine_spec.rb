@@ -1,6 +1,6 @@
 # author: Stephan Becque (https://github.com/sjbecque)
 
-require './engine.rb'
+require './src/engine.rb'
 require 'timeout'
 
 describe 'Engine' do

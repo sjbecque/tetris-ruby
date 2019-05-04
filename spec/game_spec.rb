@@ -1,7 +1,7 @@
 # author: Stephan Becque (https://github.com/sjbecque)
 
-require './engine.rb'
-require './cube'
+require './src/engine'
+require './src/cube'
 
 describe 'Game' do
 

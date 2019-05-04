@@ -1,6 +1,6 @@
 # author: Stephan Becque (https://github.com/sjbecque)
 
-require './tetronimo_factory'
+require './src/tetronimo_factory'
 
 describe 'TetronimoFactory' do
 

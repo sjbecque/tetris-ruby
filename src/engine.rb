@@ -1,7 +1,7 @@
 # author: Stephan Becque (https://github.com/sjbecque)
 
 require 'thread'
-require './game'
+require './src/game'
 require 'io/console'
 require 'eventmachine'
 require 'em-websocket'
