@@ -30,7 +30,7 @@ describe 'Game' do
 
   shared_examples 'handling horizontal collision' do |command|
     it 'lets the tetronimo stay put' do
-      expect{ subject.move(command) }
+      expect{ subject.move_horizontal(command) }
       .to_not change{subject.send(:tetronimo).map(&:coordinates) }
     end
   end
@@ -44,8 +44,8 @@ describe 'Game' do
     it 'moves the tetronimo down one spot' do
       expect{ subject.next_tick }
       .to change{subject.send(:tetronimo).map(&:y)}
-      .from( [0, 0, 1, 1] )
-      .to( [1, 1, 2, 2] )
+      .from( [0, 1, 1, 2] )
+      .to( [1, 2, 2, 3] )
     end
 
     describe 'tetrinomo at the bottom' do
@@ -80,19 +80,33 @@ describe 'Game' do
 
   describe 'process_user_input' do
     it 'moves tetronimo to the left' do
-      expect{ subject.move(:left) }
+      expect{ subject.move_horizontal(:left) }
       .to change{subject.send(:tetronimo).map(&:x)}
-      .from( [10, 11, 10, 11] )
-      .to([9, 10, 9, 10])
+      .from( [10, 10, 11, 11] )
+      .to([9, 9, 10, 10])
     end
 
     it 'moves tetronimo to the right' do
-      expect{ subject.move(:right) }
+      expect{ subject.move_horizontal(:right) }
       .to change{subject.send(:tetronimo).map(&:x)}
-      .from( [10, 11, 10, 11] )
-      .to([11, 12, 11, 12])
+      .from( [10, 10, 11, 11] )
+      .to([11, 11, 12, 12])
     end
 
+    describe 'rotate' do
+      it 'rotates tetronimo clockwise (note that y-axis points south) and performs rotation correction' do
+        expect{ subject.rotate(:clockwise) }
+        .to change{subject.send(:tetronimo) }
+        .to(
+          [
+            Tetris::Cube.new(12, 0, false),
+            Tetris::Cube.new(11, 0, true),
+            Tetris::Cube.new(11, 1, false),
+            Tetris::Cube.new(10, 1, false)
+          ]
+        )
+      end
+    end
 
     describe 'when at the leftedge' do
       let(:tetronimo) { [
@@ -121,7 +135,7 @@ describe 'Game' do
       }
 
       it "doesn't react" do
-        expect{ subject.move(:right) }
+        expect{ subject.move_horizontal(:right) }
         .to_not change{subject.send(:tetronimo).map(&:coordinates) }
       end
     end

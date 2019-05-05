@@ -60,10 +60,14 @@ module Tetris
 
     def process_user_input(input)
       case input
+      when '4'
+        @game.move_horizontal(:left)
+      when '6'
+        @game.move_horizontal(:right)
       when '1'
-        @game.move(:left)
+        @game.rotate(:counter_clockwise)
       when '3'
-        @game.move(:right)
+        @game.rotate(:clockwise)
       when 'q'
         exit
       else

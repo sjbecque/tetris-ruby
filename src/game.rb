@@ -24,18 +24,42 @@ module Tetris
       move_down
     end
 
-    def move(direction)
-      directions = {
+    def move_horizontal(direction)
+      value = {
         left: -1,
         right: 1
-      }
+      }.fetch(direction)
 
-      new_tetronimo = get_clone(@tetronimo).each do |cube|
-        cube.x = cube.x + directions.fetch(direction)
-      end
+      new_tetronimo = move( get_clone(@tetronimo), {x: value, y: 0} )
 
-      unless (boundary_collision?(new_tetronimo) or cube_collision?(new_tetronimo))
+      unless collision?(new_tetronimo)
         @tetronimo = new_tetronimo
+      end
+    end
+
+    def rotate(direction)
+      origin = origin(@tetronimo)
+
+      if origin
+        new_tetronimo = get_clone(@tetronimo).each do |cube|
+          cube.rotate(origin, direction)
+        end
+
+        new_origin = origin(new_tetronimo)
+
+        new_origin.rotation =+ case direction
+          when :clockwise then 1
+          when :counter_clockwise then -1
+        end
+
+        move(
+          new_tetronimo,
+          new_origin.rotation_correction(direction)
+        )
+
+        unless collision?(new_tetronimo)
+          @tetronimo = new_tetronimo
+        end
       end
     end
 
@@ -60,16 +84,25 @@ module Tetris
     end
 
     def move_down
-      new_tetronimo = get_clone(@tetronimo).each do |cube|
-        cube.y = cube.y + 1
-      end
+      new_tetronimo = move(get_clone(@tetronimo), {x: 0, y: 1})
 
-      if bottom_collision?(new_tetronimo) or cube_collision?(new_tetronimo)
+      if collision?(new_tetronimo)
         stonify_tetronimo
         init_tetronimo
       else
         @tetronimo = new_tetronimo
       end
+    end
+
+    def move(tetronimo, vector)
+      tetronimo.each do |cube|
+        cube.x = cube.x + vector[:x]
+        cube.y = cube.y + vector[:y]
+      end
+    end
+
+    def collision?(tetronimo)
+      bottom_collision?(tetronimo) or boundary_collision?(tetronimo) or cube_collision?(tetronimo)
     end
 
     def bottom_collision?(tetronimo)
@@ -91,6 +124,10 @@ module Tetris
       tetronimo.any? do |cube|
         !(0...@width).include?(cube.x)
       end
+    end
+
+    def origin(tetronimo)
+      tetronimo.find{|cube| cube.origin }
     end
 
     def get_clone(cubes)
