@@ -43,13 +43,13 @@ module Tetris
         ],
         [
           Cube.current(10, 0),
-          Cube.current(10, 1, 0),
+          Cube.current(10, 1, true),
           Cube.current(10, 2),
           Cube.current(11, 1)
         ],
         [
           Cube.current(10, 0),
-          Cube.current(10, 1, 0),
+          Cube.current(10, 1, true),
           Cube.current(10, 2),
           Cube.current(10, 3)
         ]

@@ -2,8 +2,8 @@
 
 module Tetris
   class Cube
-    attr_accessor :x, :y, :origin, :rotation
-    attr_reader :value
+    attr_accessor :x, :y, :rotation
+    attr_reader :value, :origin
 
     def initialize(x, y, origin = false)
       @x = x
@@ -57,6 +57,25 @@ module Tetris
       self
     end
 
+    def to_s
+      case
+      when self.current?
+        "x"
+      else
+        if @value
+          "o"
+        else
+          "-"
+       end
+      end
+    end
+
+    # reduces the rotation to be within range (0..3),
+    # meaning north, east, south, west respectively
+    def rotation_index
+      @rotation % 4
+    end
+
     def current?
       @value == :current
     end
@@ -73,19 +92,6 @@ module Tetris
       [@x, @y]
     end
 
-    def to_s
-      case
-      when self.current?
-        "x"
-      else
-        if @value
-          "o"
-        else
-          "-"
-       end
-      end
-    end
-
     def inspect
       (coordinates + [origin]).to_s
     end
@@ -94,10 +100,5 @@ module Tetris
       @value = :current
     end
 
-    # reduces the rotation to range (0..3),
-    # meaning north, east, south, west respectively
-    def rotation_index
-      @rotation % 4
-    end
   end
 end
