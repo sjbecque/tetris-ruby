@@ -47,10 +47,11 @@ module Tetris
 
         new_origin = origin(new_tetronimo)
 
-        new_origin.rotation =+ case direction
+        rotation_increment = case direction
           when :clockwise then 1
           when :counter_clockwise then -1
         end
+        new_origin.rotation = new_origin.rotation + rotation_increment
 
         move(
           new_tetronimo,
