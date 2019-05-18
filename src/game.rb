@@ -5,12 +5,12 @@ require './src/tetronimo_factory'
 module Tetris
   class Game
     attr_reader :width, :height
-    attr_reader :tetronimo, :static_cubes, :factory
+    attr_reader :tetronimo, :stones, :factory
 
-    def initialize(width = 20, height = 20, tetronimo = nil, static_cubes = StaticCubes[])
+    def initialize(width = 20, height = 20, tetronimo = nil, stones = Stones[])
       @width = width
       @height = height
-      @static_cubes = static_cubes
+      @stones = stones
       @factory = TetronimoFactory.new
 
       if tetronimo
@@ -113,11 +113,11 @@ module Tetris
     end
 
     def cube_collision?(tetronimo)
-      (tetronimo.coordinates & @static_cubes.coordinates).any?
+      (tetronimo.coordinates & @stones.coordinates).any?
     end
 
     def stonify_tetronimo
-      @static_cubes.add(@tetronimo)
+      @stones.add(@tetronimo)
     end
 
     def boundary_collision?(tetronimo)
@@ -137,7 +137,7 @@ module Tetris
     end
 
     def all_cubes
-      @tetronimo.cubes + @static_cubes.cubes
+      @tetronimo.cubes + @stones.cubes
     end
   end
 end

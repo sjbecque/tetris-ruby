@@ -36,7 +36,7 @@ module Tetris
     end
   end
 
-  class StaticCubes < CubeSet
+  class Stones < CubeSet
     def self.init_cube(*args)
       Cube.static(*args)
     end

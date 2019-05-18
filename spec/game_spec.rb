@@ -5,17 +5,17 @@ require './src/cube'
 
 Cube = Tetris::Cube
 Tetronimo = Tetris::Tetronimo
-StaticCubes = Tetris::StaticCubes
+Stones = Tetris::Stones
 
 describe 'Game' do
 
   subject {
-    Tetris::Game.new(width, height, tetronimo.dup, static_cubes.dup)
+    Tetris::Game.new(width, height, tetronimo.dup, stones.dup)
   }
 
   let(:factory) { Tetris::TetronimoFactory.new }
   let(:tetronimo) { factory.send(:tetronimos).first }
-  let(:static_cubes) { StaticCubes[] }
+  let(:stones) { Stones[] }
   let(:width) { 20 }
   let(:height) { 20 }
 
@@ -26,10 +26,10 @@ describe 'Game' do
       expect(tetronimo).to all(be_static)
     end
 
-    it 'instantiates a new tetronimo while retaining all static_cubes' do
+    it 'instantiates a new tetronimo while retaining all stones' do
       subject.next_tick
       expect(subject.send(:all_cubes).count)
-        .to eq (tetronimo.count + static_cubes.count + subject.factory.produce.count)
+        .to eq (tetronimo.count + stones.count + subject.factory.produce.count)
     end
   end
 
@@ -59,8 +59,8 @@ describe 'Game' do
         [11, height - 1]
       ] }
 
-      let(:static_cubes) {
-        StaticCubes[ [0, height - 1] ]
+      let(:stones) {
+        Stones[ [0, height - 1] ]
       }
 
       it_behaves_like 'handling moving-down collision'
@@ -74,8 +74,8 @@ describe 'Game' do
         [0, height - 2]
       ] }
 
-      let(:static_cubes) {
-        StaticCubes[ [0, height - 1] ]
+      let(:stones) {
+        Stones[ [0, height - 1] ]
       }
 
       it_behaves_like 'handling moving-down collision'
@@ -135,8 +135,8 @@ describe 'Game' do
         [11, 1]
       ] }
 
-      let(:static_cubes) {
-        StaticCubes[ [12, 1] ]
+      let(:stones) {
+        Stones[ [12, 1] ]
       }
 
       it "doesn't react" do
