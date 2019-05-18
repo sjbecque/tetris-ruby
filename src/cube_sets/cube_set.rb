@@ -34,9 +34,9 @@ module Tetris
     end
 
     def clone
-      cubeset = self.class.new
-      cubeset.cubes = @cubes.map(&:clone)
-      cubeset
+      cube_set = self.class.new
+      cube_set.cubes = @cubes.map(&:clone)
+      cube_set
     end
   end
 end

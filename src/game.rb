@@ -41,7 +41,9 @@ module Tetris
     end
 
     def rotate(direction)
-      new_tetronimo = @tetronimo.rotate(direction)
+      return unless @tetronimo.origin
+
+      new_tetronimo = @tetronimo.clone.rotate(direction)
 
       unless collision?(new_tetronimo)
         @tetronimo = new_tetronimo
