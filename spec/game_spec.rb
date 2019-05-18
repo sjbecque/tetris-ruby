@@ -2,6 +2,9 @@
 
 require './src/engine'
 require './src/cube'
+require './src/cube_sets/cube_set'
+require './src/cube_sets/stones'
+require './src/cube_sets/tetronimo'
 
 Cube = Tetris::Cube
 Tetronimo = Tetris::Tetronimo
@@ -28,7 +31,7 @@ describe 'Game' do
 
     it 'instantiates a new tetronimo while retaining all stones' do
       subject.next_tick
-      expect(subject.send(:all_cubes).count)
+      expect(subject.tetronimo.count + subject.stones.count)
         .to eq (tetronimo.count + stones.count + subject.factory.produce.count)
     end
   end
@@ -40,9 +43,8 @@ describe 'Game' do
     end
   end
 
-
   it 'assigns an array of cubes' do
-    expect(subject.send(:all_cubes)).to all(be_a(Cube))
+    expect(subject.tetronimo.cubes + subject.stones.cubes).to all(be_a(Cube))
   end
 
   describe 'next_tick' do
@@ -101,7 +103,7 @@ describe 'Game' do
     describe 'rotate' do
       it 'rotates tetronimo clockwise (note that y-axis points south) and performs rotation correction' do
         expect{ subject.rotate(:clockwise) }
-        .to change{subject.send(:tetronimo).cubes }
+        .to change{ subject.send(:tetronimo).cubes }
         .to(
           [
             Cube.new(12, 0, false),
@@ -114,17 +116,13 @@ describe 'Game' do
     end
 
     describe 'when at the leftedge' do
-      let(:tetronimo) { Tetronimo[
-        [0, 0]
-      ] }
+      let(:tetronimo) do Tetronimo[ [0, 0] ] end
 
       it_behaves_like 'handling horizontal collision', :left
     end
 
     describe 'when at the right edge' do
-      let(:tetronimo) { Tetronimo[
-        [19, 0]
-      ] }
+      let(:tetronimo) do Tetronimo[ [19, 0] ] end
 
       it_behaves_like 'handling horizontal collision', :right
     end

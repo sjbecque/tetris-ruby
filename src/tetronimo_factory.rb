@@ -1,7 +1,7 @@
 # author: Stephan Becque (https://github.com/sjbecque)
 
 require './src/cube'
-require './src/cube_set'
+require './src/cube_sets/cube_set'
 
 # "factory" is maybe a bit too strong term for this class
 # (and there is no polymorphism needed ;)

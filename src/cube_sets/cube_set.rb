@@ -6,6 +6,10 @@ module Tetris
 
     attr_accessor :cubes
 
+    def initialize
+      @cubes = []
+    end
+
     def self.[](*cubes_args)
       instance = new
       instance.cubes = cubes_args.map do |cube_args|
@@ -23,29 +27,16 @@ module Tetris
       self
     end
 
+    def get(x,y)
+      @cubes.find do |cube|
+        cube.x == x && cube.y == y
+      end
+    end
+
     def clone
-      cubeset = CubeSet.new
+      cubeset = self.class.new
       cubeset.cubes = @cubes.map(&:clone)
       cubeset
     end
   end
-
-  class Tetronimo < CubeSet
-    def self.init_cube(*args)
-      Cube.current(*args)
-    end
-  end
-
-  class Stones < CubeSet
-    def self.init_cube(*args)
-      Cube.static(*args)
-    end
-
-    def add(cubeset)
-      new_cubes = cubeset.cubes
-      new_cubes.each(&:stonify)
-      @cubes += new_cubes
-    end
-  end
-
 end

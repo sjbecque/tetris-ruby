@@ -1,6 +1,9 @@
 # author: Stephan Becque (https://github.com/sjbecque)
 require './src/cube'
 require './src/tetronimo_factory'
+require './src/cube_sets/cube_set'
+require './src/cube_sets/stones'
+require './src/cube_sets/tetronimo'
 
 module Tetris
   class Game
@@ -30,7 +33,7 @@ module Tetris
         right: 1
       }.fetch(direction)
 
-      new_tetronimo = move(@tetronimo.clone, {x: value, y: 0} )
+      new_tetronimo = @tetronimo.clone.move( {x: value, y: 0} )
 
       unless collision?(new_tetronimo)
         @tetronimo = new_tetronimo
@@ -38,29 +41,10 @@ module Tetris
     end
 
     def rotate(direction)
-      origin = origin(@tetronimo)
+      new_tetronimo = @tetronimo.rotate(direction)
 
-      if origin
-        new_tetronimo = @tetronimo.clone.each do |cube|
-          cube.rotate(origin, direction)
-        end
-
-        new_origin = origin(new_tetronimo)
-
-        rotation_increment = case direction
-          when :clockwise then 1
-          when :counter_clockwise then -1
-        end
-        new_origin.rotation = new_origin.rotation + rotation_increment
-
-        move(
-          new_tetronimo,
-          new_origin.rotation_correction(direction)
-        )
-
-        unless collision?(new_tetronimo)
-          @tetronimo = new_tetronimo
-        end
+      unless collision?(new_tetronimo)
+        @tetronimo = new_tetronimo
       end
     end
 
@@ -85,20 +69,13 @@ module Tetris
     end
 
     def move_down
-      new_tetronimo = move(@tetronimo.clone, {x: 0, y: 1})
+      new_tetronimo = @tetronimo.clone.move({x: 0, y: 1})
 
       if collision?(new_tetronimo)
         stonify_tetronimo
         init_tetronimo
       else
         @tetronimo = new_tetronimo
-      end
-    end
-
-    def move(tetronimo, vector)
-      tetronimo.each do |cube|
-        cube.x = cube.x + vector[:x]
-        cube.y = cube.y + vector[:y]
       end
     end
 
@@ -126,18 +103,8 @@ module Tetris
       end
     end
 
-    def origin(tetronimo)
-      tetronimo.find{|cube| cube.origin }
-    end
-
     def cube(x, y)
-      all_cubes.find do |cube|
-        cube.x == x && cube.y == y
-      end
-    end
-
-    def all_cubes
-      @tetronimo.cubes + @stones.cubes
+      @tetronimo.get(x,y) || @stones.get(x,y)
     end
   end
 end
