@@ -7,11 +7,11 @@ module Tetris
     attr_reader :width, :height
     attr_reader :tetronimo, :static_cubes, :factory
 
-    def initialize(test, width = 20, height = 20, tetronimo = [], static_cubes = [])
+    def initialize(width = 20, height = 20, tetronimo = [], static_cubes = [])
       @width = width
       @height = height
       @static_cubes = static_cubes
-      @factory = TetronimoFactory.new(test)
+      @factory = TetronimoFactory.new
 
       if tetronimo.any?
         @tetronimo = tetronimo

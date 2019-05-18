@@ -5,7 +5,7 @@ require './src/tetronimo_factory'
 describe 'TetronimoFactory' do
 
   subject {
-    Tetris::TetronimoFactory.new(true)
+    Tetris::TetronimoFactory.new
   }
 
   describe 'produce' do

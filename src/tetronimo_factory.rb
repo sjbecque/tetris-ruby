@@ -8,12 +8,8 @@ require './src/cube'
 module Tetris
   class TetronimoFactory
 
-    def initialize(test)
-      @test = test
-    end
-
     def produce
-      tetronimos[@test ? 0 : rand(0...tetronimos.size)]
+      tetronimos[rand(0...tetronimos.size)]
     end
 
     private

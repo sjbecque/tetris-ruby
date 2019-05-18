@@ -14,7 +14,7 @@ module Tetris
     def initialize(test: false, console: false)
       @test = test
       @console = console
-      @game = Game.new(@test)
+      @game = Game.new
       @mutex = Mutex.new
 
       if (not @test and not @console)

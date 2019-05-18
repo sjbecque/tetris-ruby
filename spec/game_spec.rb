@@ -6,10 +6,11 @@ require './src/cube'
 describe 'Game' do
 
   subject {
-    Tetris::Game.new(true, width, height, tetronimo.dup, static_cubes.dup)
+    Tetris::Game.new(width, height, tetronimo.dup, static_cubes.dup)
   }
 
-  let(:tetronimo) { [] }
+  let(:factory) { Tetris::TetronimoFactory.new }
+  let(:tetronimo) { factory.send(:tetronimos).first }
   let(:static_cubes) { [] }
   let(:width) { 20 }
   let(:height) { 20 }
