@@ -91,8 +91,14 @@ module Tetris
       @value != :current
     end
 
+    def set_current
+      @value = :current
+      self
+    end
+
     def stonify
       @value = :red
+      self
     end
 
     def coordinates
@@ -101,10 +107,6 @@ module Tetris
 
     def inspect
       (coordinates + [origin]).to_s
-    end
-
-    def set_current
-      @value = :current
     end
 
   end

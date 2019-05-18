@@ -10,7 +10,7 @@ describe 'TetronimoFactory' do
 
   describe 'produce' do
     it {
-      expect(subject.produce).to be_a(Array)
+      expect(subject.produce).to be_a(Tetris::Tetronimo)
     }
   end
 

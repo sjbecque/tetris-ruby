@@ -7,13 +7,13 @@ module Tetris
     attr_reader :width, :height
     attr_reader :tetronimo, :static_cubes, :factory
 
-    def initialize(width = 20, height = 20, tetronimo = [], static_cubes = [])
+    def initialize(width = 20, height = 20, tetronimo = nil, static_cubes = StaticCubes[])
       @width = width
       @height = height
       @static_cubes = static_cubes
       @factory = TetronimoFactory.new
 
-      if tetronimo.any?
+      if tetronimo
         @tetronimo = tetronimo
       else
         init_tetronimo
@@ -30,7 +30,7 @@ module Tetris
         right: 1
       }.fetch(direction)
 
-      new_tetronimo = move( get_clone(@tetronimo), {x: value, y: 0} )
+      new_tetronimo = move(@tetronimo.clone, {x: value, y: 0} )
 
       unless collision?(new_tetronimo)
         @tetronimo = new_tetronimo
@@ -41,7 +41,7 @@ module Tetris
       origin = origin(@tetronimo)
 
       if origin
-        new_tetronimo = get_clone(@tetronimo).each do |cube|
+        new_tetronimo = @tetronimo.clone.each do |cube|
           cube.rotate(origin, direction)
         end
 
@@ -85,7 +85,7 @@ module Tetris
     end
 
     def move_down
-      new_tetronimo = move(get_clone(@tetronimo), {x: 0, y: 1})
+      new_tetronimo = move(@tetronimo.clone, {x: 0, y: 1})
 
       if collision?(new_tetronimo)
         stonify_tetronimo
@@ -113,12 +113,11 @@ module Tetris
     end
 
     def cube_collision?(tetronimo)
-      (tetronimo.map(&:coordinates) & @static_cubes.map(&:coordinates)).any?
+      (tetronimo.coordinates & @static_cubes.coordinates).any?
     end
 
     def stonify_tetronimo
-      @tetronimo.each(&:stonify)
-      @static_cubes.concat(@tetronimo)
+      @static_cubes.add(@tetronimo)
     end
 
     def boundary_collision?(tetronimo)
@@ -131,10 +130,6 @@ module Tetris
       tetronimo.find{|cube| cube.origin }
     end
 
-    def get_clone(cubes)
-      cubes.map(&:clone)
-    end
-
     def cube(x, y)
       all_cubes.find do |cube|
         cube.x == x && cube.y == y
@@ -142,7 +137,7 @@ module Tetris
     end
 
     def all_cubes
-      @tetronimo + @static_cubes
+      @tetronimo.cubes + @static_cubes.cubes
     end
   end
 end
