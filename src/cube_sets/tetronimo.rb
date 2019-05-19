@@ -22,15 +22,41 @@ module Tetris
         cube.rotate(origin, direction)
       end
 
-      rotation_increment = case direction
+      @rotation += case direction
         when :clockwise then 1
         when :counter_clockwise then -1
       end
 
-      @rotation += rotation_increment
-
       move( rotation_correction(direction) )
     end
+
+    def move(vector)
+      each do |cube|
+        cube.x = cube.x + vector[:x]
+        cube.y = cube.y + vector[:y]
+      end
+    end
+
+    def bottom_collision?(height)
+      any? { |cube| cube.y >= height }
+    end
+
+    def boundary_collision?(width)
+      any? { |cube| !(0...width).include?(cube.x) }
+    end
+
+    def origin
+      @cubes.find{|cube| cube.origin }
+    end
+
+    def clone
+      tetronimo = super
+      tetronimo.rotation = @rotation
+      tetronimo.rotation_corrections = @rotation_corrections
+      tetronimo
+    end
+
+    private
 
     def rotation_correction(direction)
       if @rotation_corrections
@@ -48,22 +74,5 @@ module Tetris
       @rotation % 4
     end
 
-    def move(vector)
-      each do |cube|
-        cube.x = cube.x + vector[:x]
-        cube.y = cube.y + vector[:y]
-      end
-    end
-
-    def origin
-      @cubes.find{|cube| cube.origin }
-    end
-
-    def clone
-      tetronimo = super
-      tetronimo.rotation = @rotation
-      tetronimo.rotation_corrections = @rotation_corrections
-      tetronimo
-    end
   end
 end

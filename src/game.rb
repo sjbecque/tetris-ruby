@@ -82,27 +82,17 @@ module Tetris
     end
 
     def collision?(tetronimo)
-      bottom_collision?(tetronimo) or boundary_collision?(tetronimo) or cube_collision?(tetronimo)
+      tetronimo.bottom_collision?(@height) or
+      tetronimo.boundary_collision?(@width) or
+      cube_collision?(tetronimo, @stones)
     end
 
-    def bottom_collision?(tetronimo)
-      tetronimo.any? do |cube|
-        cube.y >= @height
-      end
-    end
-
-    def cube_collision?(tetronimo)
-      (tetronimo.coordinates & @stones.coordinates).any?
+    def cube_collision?(tetronimo, stones)
+      (tetronimo.coordinates & stones.coordinates).any?
     end
 
     def stonify_tetronimo
       @stones.add(@tetronimo)
-    end
-
-    def boundary_collision?(tetronimo)
-      tetronimo.any? do |cube|
-        !(0...@width).include?(cube.x)
-      end
     end
 
     def cube(x, y)
