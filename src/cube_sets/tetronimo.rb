@@ -27,7 +27,11 @@ module Tetris
         when :counter_clockwise then -1
       end
 
-      move( rotation_correction(direction) )
+      if @rotation_corrections
+        move( @rotation_corrections[rotation_index][direction] )
+      end
+
+      self
     end
 
     def move(vector)
@@ -35,6 +39,8 @@ module Tetris
         cube.x = cube.x + vector[:x]
         cube.y = cube.y + vector[:y]
       end
+
+      self
     end
 
     def bottom_collision?(height)
@@ -57,16 +63,6 @@ module Tetris
     end
 
     private
-
-    def rotation_correction(direction)
-      if @rotation_corrections
-        vectors = @rotation_corrections[rotation_index]
-
-        direction == :clockwise ? vectors.first : vectors.last
-      else
-        { x: 0, y: 0 }
-      end
-    end
 
     # reduces the rotation to be within range (0..3),
     # meaning north, east, south, west respectively

@@ -19,10 +19,10 @@ module Tetris
       [
         Tetris::Tetronimo[ [10, 0], [10, 1, true], [11, 1], [11, 2] ].set_rotation_corrections(
           {
-            0 => [{ x:-1, y:0 } , { x:-1, y:1 }],
-            1 => [{ x:1 , y:-1} , { x:0 , y:-1}],
-            2 => [{ x:0 , y:1 } , { x:0 , y:0 }],
-            3 => [{ x:0 , y:0 } , { x:1 , y:0 }]
+            0 => { clockwise: { x:-1, y:0 } , counter_clockwise: { x:-1, y:1 } },
+            1 => { clockwise: { x:1 , y:-1} , counter_clockwise: { x:0 , y:-1} },
+            2 => { clockwise: { x:0 , y:1 } , counter_clockwise: { x:0 , y:0 } },
+            3 => { clockwise: { x:0 , y:0 } , counter_clockwise: { x:1 , y:0 } }
           }
         ),
         Tetris::Tetronimo[[10, 0], [11, 0],       [10, 1], [11, 1]],
@@ -30,5 +30,6 @@ module Tetris
         Tetris::Tetronimo[[10, 0], [10, 1, true], [10, 2], [10, 3]]
       ]
     end
+
   end
 end
