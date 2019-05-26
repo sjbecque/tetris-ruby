@@ -29,6 +29,12 @@ describe 'Game' do
       expect(tetronimo).to all(be_static)
     end
 
+    it 'processes completed rows' do
+      expect(subject.stones).to receive(:process_completed_rows)
+        .with(subject.width, subject.height)
+      subject.next_tick
+    end
+
     it 'instantiates a new tetronimo while retaining all stones' do
       subject.next_tick
       expect(subject.tetronimo.count + subject.stones.count)

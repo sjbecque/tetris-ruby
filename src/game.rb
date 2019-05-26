@@ -75,6 +75,7 @@ module Tetris
 
       if collision?(new_tetronimo)
         stonify_tetronimo
+        @stones.process_completed_rows(@width, @height)
         init_tetronimo
       else
         @tetronimo = new_tetronimo

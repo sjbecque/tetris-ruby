@@ -33,6 +33,14 @@ module Tetris
       end
     end
 
+    def self.init_cube(*args)
+      Cube.new(*args)
+    end
+
+    def ==(other)
+      @cubes.map(&:coordinates).sort == other.cubes.map(&:coordinates).sort
+    end
+
     def clone
       cube_set = self.class.new
       cube_set.cubes = @cubes.map(&:clone)
