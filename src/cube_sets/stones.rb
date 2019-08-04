@@ -3,7 +3,7 @@
 module Tetris
   class Stones < CubeSet
     def self.init_cube(*args)
-      Cube.static(*args)
+      Cube.stone(*args)
     end
 
     def add(cubeset)

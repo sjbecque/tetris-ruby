@@ -24,9 +24,9 @@ describe 'Game' do
 
 
   shared_examples 'handling moving-down collision' do
-    it 'turns the tetronimo into static cubes' do
+    it 'turns the tetronimo into stones' do
       subject.next_tick
-      expect(tetronimo).to all(be_static)
+      expect(tetronimo).to all(be_stone)
     end
 
     it 'processes completed rows' do
@@ -37,8 +37,11 @@ describe 'Game' do
 
     it 'instantiates a new tetronimo while retaining all stones' do
       subject.next_tick
-      expect(subject.tetronimo.count + subject.stones.count)
-        .to eq (tetronimo.count + stones.count + subject.factory.produce.count)
+
+      original_plus_spawned_count = tetronimo.count + stones.count + subject.factory.produce.count
+      current_count = subject.tetronimo.count + subject.stones.count
+
+      expect(original_plus_spawned_count).to eq (current_count)
     end
   end
 
@@ -49,7 +52,7 @@ describe 'Game' do
     end
   end
 
-  it 'assigns an array of cubes' do
+  it 'its collections contain arrays of cubes' do
     expect(subject.tetronimo.cubes + subject.stones.cubes).to all(be_a(Cube))
   end
 
@@ -74,9 +77,7 @@ describe 'Game' do
       it_behaves_like 'handling moving-down collision'
     end
 
-    describe 'tetrinomo just above a static cube' do
-      let(:height) { 20 }
-
+    describe 'tetrinomo just above a stone' do
       let(:tetronimo) { Tetronimo[
         [0, height - 3],
         [0, height - 2]

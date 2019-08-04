@@ -9,7 +9,6 @@ module Tetris
       @x = x
       @y = y
       @origin = origin
-      @rotation = 0
     end
 
     def self.current(x, y, origin = false)
@@ -18,7 +17,7 @@ module Tetris
       instance
     end
 
-    def self.static(x, y)
+    def self.stone(x, y)
       instance = new(x, y)
       instance.stonify
       instance
@@ -70,7 +69,7 @@ module Tetris
       @value == :current
     end
 
-    def static?
+    def stone?
       @value != :current
     end
 
